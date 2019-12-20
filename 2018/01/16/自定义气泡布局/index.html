@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://wangyi.blog').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="Demo：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android自定义气泡布局">
+<meta property="og:url" content="https://wangyi.blog/2018/01/16/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B0%94%E6%B3%A1%E5%B8%83%E5%B1%80/index.html">
+<meta property="og:site_name" content="WangYi&#39;s Blog">
+<meta property="og:description" content="Demo：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.oktools.net/20191217095742.png">
+<meta property="article:published_time" content="2018-01-16T08:09:00.000Z">
+<meta property="article:modified_time" content="2019-12-20T12:20:09.548Z">
+<meta property="article:author" content="WangYi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.oktools.net/20191217095742.png">
+
+<link rel="canonical" href="https://wangyi.blog/2018/01/16/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B0%94%E6%B3%A1%E5%B8%83%E5%B1%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Android自定义气泡布局 | WangYi's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-154197488-2"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-154197488-2');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WangYi's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangyi.blog/2018/01/16/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B0%94%E6%B3%A1%E5%B8%83%E5%B1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="WangYi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WangYi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android自定义气泡布局
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-16 16:09:00" itemprop="dateCreated datePublished" datetime="2018-01-16T16:09:00+08:00">2018-01-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-20 20:20:09" itemprop="dateModified" datetime="2019-12-20T20:20:09+08:00">2019-12-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span id="/2018/01/16/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B0%94%E6%B3%A1%E5%B8%83%E5%B1%80/" class="post-meta-item leancloud_visitors" data-flag-title="Android自定义气泡布局" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Demo："><a href="#Demo：" class="headerlink" title="Demo："></a>Demo：</h2><p><img src="http://blog.oktools.net/20191217095742.png" alt="demo.png"></p>
+<a id="more"></a>
+<h2 id="功能："><a href="#功能：" class="headerlink" title="功能："></a>功能：</h2><ul>
+<li>支持4个方向</li>
+<li>设置三角形位置</li>
+<li>设置阴影颜色，大小</li>
+<li>设置圆角</li>
+<li>自定义背景颜色</li>
+</ul>
+<h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BubbleLayout</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> LEFT = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TOP = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> RIGHT = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BOTTOM = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@IntDef</span>(&#123;LEFT, TOP, RIGHT, BOTTOM&#125;)</span><br><span class="line">    <span class="keyword">private</span> <span class="meta">@interface</span> Direction &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 圆角大小</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mRadius;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 三角形的方向</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Direction</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mDirection;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 三角形的底边中心点</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Point mDatumPoint;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 三角形位置偏移量(默认居中)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mOffset;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Paint mBorderPaint;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Path mPath;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> RectF mRect;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BubbleLayout</span><span class="params">(Context context, @Nullable AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs);</span><br><span class="line">        init(context, attrs);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BubbleLayout);</span><br><span class="line">        <span class="comment">//背景颜色</span></span><br><span class="line">        <span class="keyword">int</span> backGroundColor = ta.getColor(R.styleable.BubbleLayout_background_color, Color.WHITE);</span><br><span class="line">        <span class="comment">//阴影颜色</span></span><br><span class="line">        <span class="keyword">int</span> shadowColor = ta.getColor(R.styleable.BubbleLayout_shadow_color,</span><br><span class="line">                Color.parseColor(<span class="string">"#999999"</span>));</span><br><span class="line">        <span class="keyword">int</span> defShadowSize = (<span class="keyword">int</span>) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX,</span><br><span class="line">                <span class="number">4</span>, getResources().getDisplayMetrics());</span><br><span class="line">        <span class="comment">//阴影尺寸</span></span><br><span class="line">        <span class="keyword">int</span> shadowSize = ta.getDimensionPixelSize(R.styleable.BubbleLayout_shadow_size, defShadowSize);</span><br><span class="line">        mRadius = ta.getDimensionPixelSize(R.styleable.BubbleLayout_radius, <span class="number">0</span>);</span><br><span class="line">        <span class="comment">//三角形方向</span></span><br><span class="line">        mDirection = ta.getInt(R.styleable.BubbleLayout_direction, BOTTOM);</span><br><span class="line">        mOffset = ta.getDimensionPixelOffset(R.styleable.BubbleLayout_offset, <span class="number">0</span>);</span><br><span class="line">        ta.recycle();</span><br><span class="line"></span><br><span class="line">        mBorderPaint = <span class="keyword">new</span> Paint();</span><br><span class="line">        mBorderPaint.setAntiAlias(<span class="keyword">true</span>);</span><br><span class="line">        mBorderPaint.setColor(backGroundColor);</span><br><span class="line">        mBorderPaint.setShadowLayer(shadowSize, <span class="number">0</span>, <span class="number">0</span>, shadowColor);</span><br><span class="line"></span><br><span class="line">        mPath = <span class="keyword">new</span> Path();</span><br><span class="line">        mRect = <span class="keyword">new</span> RectF();</span><br><span class="line">        mDatumPoint = <span class="keyword">new</span> Point();</span><br><span class="line"></span><br><span class="line">        setWillNotDraw(<span class="keyword">false</span>);</span><br><span class="line">        <span class="comment">//关闭硬件加速</span></span><br><span class="line">        setLayerType(LAYER_TYPE_SOFTWARE, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line">        <span class="keyword">if</span> (mDatumPoint.x &gt; <span class="number">0</span> &amp;&amp; mDatumPoint.y &gt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">switch</span> (mDirection) &#123;</span><br><span class="line">                <span class="keyword">case</span> LEFT:</span><br><span class="line">                    drawLeftTriangle(canvas);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> TOP:</span><br><span class="line">                    drawTopTriangle(canvas);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> RIGHT:</span><br><span class="line">                    drawRightTriangle(canvas);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> BOTTOM:</span><br><span class="line">                    drawBottomTriangle(canvas);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">drawLeftTriangle</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> triangularLength = getPaddingLeft();</span><br><span class="line">        <span class="keyword">if</span> (triangularLength == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        mPath.addRoundRect(mRect, mRadius, mRadius, Path.Direction.CCW);</span><br><span class="line">        mPath.moveTo(mDatumPoint.x, mDatumPoint.y - triangularLength / <span class="number">2</span>);</span><br><span class="line">        mPath.lineTo(mDatumPoint.x - triangularLength / <span class="number">2</span>, mDatumPoint.y);</span><br><span class="line">        mPath.lineTo(mDatumPoint.x, mDatumPoint.y + triangularLength / <span class="number">2</span>);</span><br><span class="line">        mPath.close();</span><br><span class="line">        canvas.drawPath(mPath, mBorderPaint);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">drawTopTriangle</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> triangularLength = getPaddingTop();</span><br><span class="line">        <span class="keyword">if</span> (triangularLength == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        mPath.addRoundRect(mRect, mRadius, mRadius, Path.Direction.CCW);</span><br><span class="line">        mPath.moveTo(mDatumPoint.x + triangularLength / <span class="number">2</span>, mDatumPoint.y);</span><br><span class="line">        mPath.lineTo(mDatumPoint.x, mDatumPoint.y - triangularLength / <span class="number">2</span>);</span><br><span class="line">        mPath.lineTo(mDatumPoint.x - triangularLength / <span class="number">2</span>, mDatumPoint.y);</span><br><span class="line">        mPath.close();</span><br><span class="line">        canvas.drawPath(mPath, mBorderPaint);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">drawRightTriangle</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> triangularLength = getPaddingRight();</span><br><span class="line">        <span class="keyword">if</span> (triangularLength == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        mPath.addRoundRect(mRect, mRadius, mRadius, Path.Direction.CCW);</span><br><span class="line">        mPath.moveTo(mDatumPoint.x, mDatumPoint.y - triangularLength / <span class="number">2</span>);</span><br><span class="line">        mPath.lineTo(mDatumPoint.x + triangularLength / <span class="number">2</span>, mDatumPoint.y);</span><br><span class="line">        mPath.lineTo(mDatumPoint.x, mDatumPoint.y + triangularLength / <span class="number">2</span>);</span><br><span class="line">        mPath.close();</span><br><span class="line">        canvas.drawPath(mPath, mBorderPaint);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">drawBottomTriangle</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> triangularLength = getPaddingBottom();</span><br><span class="line">        <span class="keyword">if</span> (triangularLength == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        mPath.addRoundRect(mRect, mRadius, mRadius, Path.Direction.CCW);</span><br><span class="line">        mPath.moveTo(mDatumPoint.x + triangularLength / <span class="number">2</span>, mDatumPoint.y);</span><br><span class="line">        mPath.lineTo(mDatumPoint.x, mDatumPoint.y + triangularLength / <span class="number">2</span>);</span><br><span class="line">        mPath.lineTo(mDatumPoint.x - triangularLength / <span class="number">2</span>, mDatumPoint.y);</span><br><span class="line">        mPath.close();</span><br><span class="line">        canvas.drawPath(mPath, mBorderPaint);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onSizeChanged</span><span class="params">(<span class="keyword">int</span> w, <span class="keyword">int</span> h, <span class="keyword">int</span> oldw, <span class="keyword">int</span> oldh)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onSizeChanged(w, h, oldw, oldh);</span><br><span class="line"></span><br><span class="line">        mRect.left = getPaddingLeft();</span><br><span class="line">        mRect.top = getPaddingTop();</span><br><span class="line">        mRect.right = w - getPaddingRight();</span><br><span class="line">        mRect.bottom = h - getPaddingBottom();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">switch</span> (mDirection) &#123;</span><br><span class="line">            <span class="keyword">case</span> LEFT:</span><br><span class="line">                mDatumPoint.x = getPaddingLeft();</span><br><span class="line">                mDatumPoint.y = h / <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TOP:</span><br><span class="line">                mDatumPoint.x = w / <span class="number">2</span>;</span><br><span class="line">                mDatumPoint.y = getPaddingTop();</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RIGHT:</span><br><span class="line">                mDatumPoint.x = w - getPaddingRight();</span><br><span class="line">                mDatumPoint.y = h / <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> BOTTOM:</span><br><span class="line">                mDatumPoint.x = w / <span class="number">2</span>;</span><br><span class="line">                mDatumPoint.y = h - getPaddingBottom();</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (mOffset != <span class="number">0</span>) &#123;</span><br><span class="line">            applyOffset();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 设置三角形偏移位置</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> offset 偏移量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTriangleOffset</span><span class="params">(<span class="keyword">int</span> offset)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.mOffset = offset;</span><br><span class="line">        applyOffset();</span><br><span class="line">        invalidate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">applyOffset</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (mDirection) &#123;</span><br><span class="line">            <span class="keyword">case</span> LEFT:</span><br><span class="line">            <span class="keyword">case</span> RIGHT:</span><br><span class="line">                mDatumPoint.y += mOffset;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TOP:</span><br><span class="line">            <span class="keyword">case</span> BOTTOM:</span><br><span class="line">                mDatumPoint.x += mOffset;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="使用："><a href="#使用：" class="headerlink" title="使用："></a>使用：</h2><ol>
+<li>复制BubbleLayout到项目中</li>
+<li>复制以下属性到res/values/attrs中<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">declare-styleable</span> <span class="attr">name</span>=<span class="string">"BubbleLayout"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"background_color"</span> <span class="attr">format</span>=<span class="string">"color"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"shadow_color"</span> <span class="attr">format</span>=<span class="string">"color"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"shadow_size"</span> <span class="attr">format</span>=<span class="string">"dimension"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"radius"</span> <span class="attr">format</span>=<span class="string">"dimension"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"direction"</span> <span class="attr">format</span>=<span class="string">"enum"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">enum</span> <span class="attr">name</span>=<span class="string">"left"</span> <span class="attr">value</span>=<span class="string">"1"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">enum</span> <span class="attr">name</span>=<span class="string">"top"</span> <span class="attr">value</span>=<span class="string">"2"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">enum</span> <span class="attr">name</span>=<span class="string">"right"</span> <span class="attr">value</span>=<span class="string">"3"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">enum</span> <span class="attr">name</span>=<span class="string">"bottom"</span> <span class="attr">value</span>=<span class="string">"4"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">attr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">attr</span> <span class="attr">name</span>=<span class="string">"offset"</span> <span class="attr">format</span>=<span class="string">"dimension"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">declare-styleable</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>xml中使用<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">me.wy.app.BubbleLayout</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">    //必须设置足够的<span class="attr">padding</span>才可以绘制三角形和阴影</span></span><br><span class="line"><span class="tag">    <span class="attr">android:padding</span>=<span class="string">"16dp"</span></span></span><br><span class="line"><span class="tag">    //背景颜色</span></span><br><span class="line"><span class="tag">    <span class="attr">app:background_color</span>=<span class="string">"#FF4081"</span></span></span><br><span class="line"><span class="tag">    //三角形方向</span></span><br><span class="line"><span class="tag">    <span class="attr">app:direction</span>=<span class="string">"left"</span></span></span><br><span class="line"><span class="tag">    //三角形相对偏移量</span></span><br><span class="line"><span class="tag">    <span class="attr">app:offset</span>=<span class="string">"-40dp"</span></span></span><br><span class="line"><span class="tag">    //圆角大小</span></span><br><span class="line"><span class="tag">    <span class="attr">app:radius</span>=<span class="string">"4dp"</span></span></span><br><span class="line"><span class="tag">    //阴影颜色</span></span><br><span class="line"><span class="tag">    <span class="attr">app:shadow_color</span>=<span class="string">"#999999"</span></span></span><br><span class="line"><span class="tag">    //阴影大小</span></span><br><span class="line"><span class="tag">    <span class="attr">app:shadow_size</span>=<span class="string">"4dp"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">me.wy.app.BubbleLayout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Github地址"><a href="#Github地址" class="headerlink" title="Github地址"></a><a href="https://github.com/wangyiwy/BubbleLayout" target="_blank" rel="noopener">Github地址</a></h2></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/16/%E9%87%8D%E6%96%B0%E5%BC%80%E5%A7%8B%E5%86%99%E5%8D%9A%E5%AE%A2/" rel="next" title="重新开始写博客">
+      重新开始写博客 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo："><span class="nav-number">1.</span> <span class="nav-text">Demo：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#功能："><span class="nav-number">2.</span> <span class="nav-text">功能：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码："><span class="nav-number">3.</span> <span class="nav-text">代码：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用："><span class="nav-number">4.</span> <span class="nav-text">使用：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Github地址"><span class="nav-number">5.</span> <span class="nav-text">Github地址</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WangYi"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">WangYi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangyiwy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangyiwy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wangyi.aug@gmail.com" title="E-Mail → mailto:wangyi.aug@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://oktools.net/" title="https:&#x2F;&#x2F;oktools.net" rel="noopener" target="_blank">oktools</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://whisper.wangyi.blog/" title="http:&#x2F;&#x2F;whisper.wangyi.blog" rel="noopener" target="_blank">whisper</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WangYi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.1.1
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = visitors.getAttribute('id').trim();
+      var title = visitors.getAttribute('data-flag-title').trim();
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+              leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .catch(error => {
+                console.log('Failed to save visitor count', error);
+              })
+          } else {
+              Counter('post', '/classes/Counter', { title: title, url: url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.log('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.log('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return element.getAttribute('id').trim();
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.log('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=FlSVOSjUNv6oCv8an6Q437o4-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id': 'FlSVOSjUNv6oCv8an6Q437o4-gzGzoHsz',
+            'X-LC-Key': 'KW3bpHAhA6iE5mAkdv3Omygl',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

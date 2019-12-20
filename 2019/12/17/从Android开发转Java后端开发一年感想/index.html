@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://wangyi.blog').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="去年12月份，我完成了进入目前公司的第一个Android项目。但项目最终并没有正式上线，公司也暂时没有新的移动端需求，出于个人意愿和公司需要我开始转到Java后端开发。到目前刚好一年的后端开发经验，我想总结下我的主观感受。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从Android开发转Java后端开发一年感想">
+<meta property="og:url" content="https://wangyi.blog/2019/12/17/%E4%BB%8EAndroid%E5%BC%80%E5%8F%91%E8%BD%ACJava%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E4%B8%80%E5%B9%B4%E6%84%9F%E6%83%B3/index.html">
+<meta property="og:site_name" content="WangYi&#39;s Blog">
+<meta property="og:description" content="去年12月份，我完成了进入目前公司的第一个Android项目。但项目最终并没有正式上线，公司也暂时没有新的移动端需求，出于个人意愿和公司需要我开始转到Java后端开发。到目前刚好一年的后端开发经验，我想总结下我的主观感受。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-12-17T09:12:23.000Z">
+<meta property="article:modified_time" content="2019-12-20T12:20:09.547Z">
+<meta property="article:author" content="WangYi">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://wangyi.blog/2019/12/17/%E4%BB%8EAndroid%E5%BC%80%E5%8F%91%E8%BD%ACJava%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E4%B8%80%E5%B9%B4%E6%84%9F%E6%83%B3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>从Android开发转Java后端开发一年感想 | WangYi's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-154197488-2"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-154197488-2');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WangYi's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangyi.blog/2019/12/17/%E4%BB%8EAndroid%E5%BC%80%E5%8F%91%E8%BD%ACJava%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E4%B8%80%E5%B9%B4%E6%84%9F%E6%83%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="WangYi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WangYi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从Android开发转Java后端开发一年感想
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-17 17:12:23" itemprop="dateCreated datePublished" datetime="2019-12-17T17:12:23+08:00">2019-12-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-20 20:20:09" itemprop="dateModified" datetime="2019-12-20T20:20:09+08:00">2019-12-20</time>
+              </span>
+
+          
+            <span id="/2019/12/17/%E4%BB%8EAndroid%E5%BC%80%E5%8F%91%E8%BD%ACJava%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E4%B8%80%E5%B9%B4%E6%84%9F%E6%83%B3/" class="post-meta-item leancloud_visitors" data-flag-title="从Android开发转Java后端开发一年感想" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>去年12月份，我完成了进入目前公司的第一个Android项目。但项目最终并没有正式上线，公司也暂时没有新的移动端需求，出于个人意愿和公司需要我开始转到Java后端开发。到目前刚好一年的后端开发经验，我想总结下我的主观感受。</p>
+<a id="more"></a>
+<p><strong>做Android开发有哪些不好的体验?</strong></p>
+<ul>
+<li>兼容性要求<br>需要兼容不同厂家、不同系统、不同的屏幕的Android设备。使你开发的App能够在每个用户的设备上都能正确流畅的运行是非常重要的事情，但从技术提升的角度来看，这样的工作毫无意义。</li>
+<li>额外的工作量<br>国内的绝大多数App UI设计和交互设计都是使用iOS的规范。iOS风格的UI和交互方式。iOS开发直接使用系统控件，而Android端可能要花几天来实现。</li>
+<li>需求变更频繁<br>需要变更也会影响到后端，但根据我的经验来说，每次需要变更前端都是改动最多的。</li>
+<li>开发工具<br>Android项目从编译到运行需要几十秒到几分钟，而一个Java的后端服务只需要几秒就能运行起来。Android Studio 功能已经十分的强大，同时也十分的占资源。而对于后端开发来说，除了java这样重度依赖ide的语言，你都可以用很轻量的文本编辑器来开发。</li>
+</ul>
+<p><strong>我认为后端的开发体验好于Android开发</strong></p>
+<ul>
+<li>写CURD比写UI页面简单，CRUD的工作量是很容易评估的，但是写UI的工作量取决于还原设计的难度和需要适配的设备。</li>
+<li>接口由自己定义，不用对接奇葩的接口，不规范的命名，不合理的数据结构，不规范的错误响应。</li>
+<li>开发调试方便，你写的程序在本地就能Run起来，而不用需要安装到手机上。</li>
+<li>相对来说后端比前端和移动端更受重视，因为后端掌握着数据和业务逻辑。</li>
+</ul>
+<p>我从毕业开始做了3年多的Android开发，对于Android技术栈各个方面都有了一些积累。移动开发和后端开发之间的差异还是比较大的，选择转到后端开发意味着跳出舒适区，需要补习很多后端开发的知识。但从上面讲的开发体验角度来说，我觉得切换到后端开发是一件正确的事情。另外从大的环境来说，移动端的需求是越来越少的，并且我们有更多的新技术来替代原生开发，比如Web、React Native/Flutter、小程序等。市场已经不需要这么多的移动开发人员，必然会有大量的Android/iOS开发者转向后端和Web开发。</p>
+<p>对于我来说，从Android开发切换到Java后端开发是比较顺利的，只花一点时间熟悉下 Spring Boot、Spring Cloud 相关的知识就可以开始写CURD接口了。</p>
+<p>当然后端的技术栈上限是很高的，要成为一个优秀的后端开发人员还有很多的知识需要积累。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/16/%E4%B8%BA%E4%BB%80%E4%B9%88StringBuilder%E6%AF%94%E6%8B%BC%E6%8E%A5String%E9%AB%98%E6%95%88/" rel="prev" title="为什么StringBuilder比拼接String高效">
+      <i class="fa fa-chevron-left"></i> 为什么StringBuilder比拼接String高效
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/19/%E6%A0%87%E5%87%86Lena%E6%B5%8B%E8%AF%95%E5%9B%BE%E5%83%8F%E4%B8%8B%E8%BD%BD/" rel="next" title="标准Lena测试图像下载">
+      标准Lena测试图像下载 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WangYi"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">WangYi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangyiwy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangyiwy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wangyi.aug@gmail.com" title="E-Mail → mailto:wangyi.aug@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://oktools.net/" title="https:&#x2F;&#x2F;oktools.net" rel="noopener" target="_blank">oktools</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://whisper.wangyi.blog/" title="http:&#x2F;&#x2F;whisper.wangyi.blog" rel="noopener" target="_blank">whisper</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WangYi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.1.1
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = visitors.getAttribute('id').trim();
+      var title = visitors.getAttribute('data-flag-title').trim();
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+              leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .catch(error => {
+                console.log('Failed to save visitor count', error);
+              })
+          } else {
+              Counter('post', '/classes/Counter', { title: title, url: url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.log('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.log('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return element.getAttribute('id').trim();
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.log('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=FlSVOSjUNv6oCv8an6Q437o4-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id': 'FlSVOSjUNv6oCv8an6Q437o4-gzGzoHsz',
+            'X-LC-Key': 'KW3bpHAhA6iE5mAkdv3Omygl',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
